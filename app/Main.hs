@@ -3,4 +3,4 @@ module Main where
 import Lexer
 
 main :: IO ()
-main = someFunc
+main = print $ lexer "10+20-30"
