@@ -3,7 +3,7 @@ module Lexer where
 data Expr = Expr Expr ExprOp Expr | ENumber Number deriving (Show)
 data Number = NoNumber | NDigit Digit | Number Number Digit deriving (Show)
 data Digit = Digit Char deriving (Show)
-data ExprOp = ExprOp Char deriving (Show)
+data ExprOp = Plus | Minus | Mult deriving (Show)
 
 lexer :: String -> Expr
 lexer = lexer' NoNumber
@@ -13,13 +13,16 @@ lexer' num [] = ENumber num
 lexer' NoNumber prg
     | p == '1' ||  p == '2' || p == '3' || p == '4' || p == '5' || p == '6' || p == '7' || p == '8' || p == '9' || p == '0' 
         = lexer' (NDigit $ Digit p) (tail prg)
-    | p == '+' || p == '-' = ENumber NoNumber
+    | p == '+' || p == '-' || p == '*' || p == '/'
+        = ENumber NoNumber
     | otherwise = lexer $ tail prg
     where p = prg !! 0
+lexer' num ('+':prg) = Expr (ENumber num) Plus (lexer' NoNumber prg)
+lexer' num ('-':prg) = Expr (ENumber num) Minus (lexer' NoNumber prg)
+lexer' num ('*':prg) = Expr (ENumber num) Mult (lexer' NoNumber prg)
 lexer' num prg
     | p == '1' ||  p == '2' || p == '3' || p == '4' || p == '5' || p == '6' || p == '7' || p == '8' || p == '9' || p == '0' 
         = lexer' (Number num $ Digit p) (tail prg)
-    | p == '+' || p == '-' = Expr (ENumber num) (ExprOp p) (lexer' NoNumber $ tail prg)
     | p == '\n'  = ENumber num
     | otherwise = lexer' num (tail prg)
     where p = prg !! 0

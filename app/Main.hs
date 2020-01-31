@@ -1,6 +1,14 @@
 module Main where
 
 import Lexer
+import Parser (parser)
 
 main :: IO ()
-main = print $ lexer "10+20-30"
+main = do
+    line <- getLine
+    if line == ""
+        then putStrLn "Exit"
+        else do 
+            print $ parser $ lexer line
+            main
+
