@@ -1,6 +1,6 @@
 module Main where
 
-import Lexer
+import Lexer (lexer)
 import Parser (parser)
 
 main :: IO ()
@@ -11,4 +11,3 @@ main = do
         else do 
             print $ parser $ lexer line
             main
-
