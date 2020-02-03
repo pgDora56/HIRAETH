@@ -4,5 +4,5 @@ Compiler to compile "HIRAETH"
 
 ## License
 
-[MIT](LICENSE)
+[BSD-3](LICENSE)
 
