@@ -1,0 +1,67 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 6f69b0bc50f3b2b6c0a542c940126aca4f38df90217e3c358abc8e8b6ad8c34d
+
+name:           HIRAETH
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/pgDora56/HIRAETH#readme>
+homepage:       https://github.com/pgDora56/HIRAETH#readme
+bug-reports:    https://github.com/pgDora56/HIRAETH/issues
+author:         Dora F.
+maintainer:     doradora.prog@gmail.com
+copyright:      2019 Dora F.
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/pgDora56/HIRAETH
+
+library
+  exposed-modules:
+      Compiler
+      Lexer
+      Parser
+      Writer
+  other-modules:
+      Paths_HIRAETH
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , binary
+  default-language: Haskell2010
+
+executable HIRAETH-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_HIRAETH
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      HIRAETH
+    , base >=4.7 && <5
+  default-language: Haskell2010
+
+test-suite HIRAETH-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_HIRAETH
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      HIRAETH
+    , base >=4.7 && <5
+  default-language: Haskell2010
