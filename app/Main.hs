@@ -5,7 +5,7 @@ import Parser (parser)
 import Compiler (compile)
 
 main :: IO ()
-main = compile $ parser $ lexer "print(12+23);"
+main = compile $ parser $ lexer "print(12);"
 -- main = do
 --     line <- getLine
 --     if line == ""

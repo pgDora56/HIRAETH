@@ -4,6 +4,7 @@ module Compiler where
 import qualified Data.ByteString.Lazy as B
 import GHC.Int
 import Parser
+import Lexer
 import qualified Writer
 -- import Codec.Binary.UTF8.String
 
@@ -141,9 +142,9 @@ main_class prg = do
                 access_flag [ACC_PUBLIC, ACC_STATIC]
                 Writer.u2Write' [9, 10, 1, 8] -- name_index, descripter_index, attributes_count, attribute_name_index
                 let codes = analyze prg
-                let codes_len = fromIntegral(length codes) :: Int32
+                let codes_len = fromIntegral $ length codes :: Int32
                 Writer.u4Write (codes_len + 12)
-                Writer.u2Write' [256, 1] -- max_stack, max_locals
+                Writer.u2Write' [3, 1] -- max_stack, max_locals
                 Writer.u4Write codes_len
                 Writer.u1Write' codes
                 Writer.u2Write' [0, 0]
@@ -151,22 +152,22 @@ main_class prg = do
 
 
 analyze :: Program -> [U1]
-analyze [] _ = []
-analyze prg = case p of
+analyze prg = case prg of
     PrgNone -> []
-    PrgP (Print expr) -> print Expr
+    PrgP (Print expr) -> printPrg expr
     PrgA (AssignExpr ident expr) -> assign ident expr
-    Prg p1 p2 = (analyze p1) ++ (analyze p2)
+    Prg p1 p2 -> (analyze p1) ++ (analyze p2)
 
-print :: Expr -> [U1]
-print exp = [0xb2, 0x00, 0x02] ++ expr exp ++ [0xb6, 0x00, 0x03]
+printPrg :: Expr -> [U1]
+printPrg exp = [0xb2, 0x00, 0x02] ++ expr exp ++ [0xb6, 0x00, 0x03]
 
 assign :: Ident -> Expr -> [U1]
 assign _ _ = []
 
 expr :: Expr -> [U1]
+expr ExpNone = []
 expr (ExpI i) = [0x00]
-expr (ExpN (Number i)) = [0x10, i]
+expr (ExpN (Number i)) = [0x10, ((fromIntegral i)::Int8)]
 expr (ExpO op) = case op of
     Plus -> [96]
     Minus -> [100]
